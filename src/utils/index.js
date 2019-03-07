@@ -2,7 +2,7 @@
  *  全局方法，但是使用率不高，哪里使用哪里import 就好
  */
 
-export function parseTime(time, cFormat) {
+export function parseTime (time, cFormat) {
   if (arguments.length === 0) {
     return null
   }

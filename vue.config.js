@@ -1,20 +1,19 @@
-
 const path = require('path')
 const CompressionWebpackPlugin = require('compression-webpack-plugin')
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, './', dir)
 }
 
 // cdn预加载使用
 const externals = {
-  'vue': 'Vue',
+  vue: 'Vue',
   'vue-router': 'VueRouter',
-  'vuex': 'Vuex',
-  'axios': 'axios',
+  vuex: 'Vuex',
+  axios: 'axios',
   'element-ui': 'ELEMENT',
   'js-cookie': 'Cookies',
-  'nprogress': 'NProgress'
+  nprogress: 'NProgress'
 }
 
 const cdn = {
@@ -88,9 +87,20 @@ module.exports = {
     // 修改images loader 添加svg处理
     const imagesRule = config.module.rule('images')
     imagesRule.exclude.add(resolve('src/icons'))
-    config.module
-      .rule('images')
-      .test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
+    config.module.rule('images').test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
+  },
+
+  // open: true,
+  // hot: true,
+  // https: true,
+  proxy: {
+    '/proxy': {
+      target: 'http://47.94.138.75',
+      changeOrigin: true,
+      pathRewrite: {
+        '^/proxy': ''
+      }
+    }
   },
 
   // 修改webpack config, 使其不打包externals下的资源
@@ -102,13 +112,16 @@ module.exports = {
 
       myConfig.plugins = []
       // 2. 构建时开启gzip，降低服务器压缩对CPU资源的占用，服务器也要相应开启gzip
-      productionGzip && myConfig.plugins.push(
-        new CompressionWebpackPlugin({
-          test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
-          threshold: 8192,
-          minRatio: 0.8
-        })
-      )
+      productionGzip &&
+        myConfig.plugins.push(
+          new CompressionWebpackPlugin({
+            test: new RegExp(
+              '\\.(' + productionGzipExtensions.join('|') + ')$'
+            ),
+            threshold: 8192,
+            minRatio: 0.8
+          })
+        )
     }
     if (process.env.NODE_ENV === 'development') {
       /**
@@ -118,7 +131,7 @@ module.exports = {
         disableHostCheck: true
       }
     }
-    //   open: true,
+    open: true
     //   hot: true
     //   // https: true,
     //   // proxy: {

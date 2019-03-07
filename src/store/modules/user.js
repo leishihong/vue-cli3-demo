@@ -28,31 +28,37 @@ const user = {
     // 登录
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
-        api.login(userInfo).then(res => {
-          if (res.code === 200) {
-            setToken(res.data)
-            commit('SET_TOKEN', res.data)
-          }
-          resolve()
-        }).catch(err => {
-          reject(err)
-        })
+        api
+          .login(userInfo)
+          .then(res => {
+            if (res.code === 200) {
+              setToken(res.data)
+              commit('SET_TOKEN', res.data)
+            }
+            resolve()
+          })
+          .catch(err => {
+            reject(err)
+          })
       })
     },
 
     // 获取用户信息
     GetUserInfo ({ commit, state }) {
       return new Promise((resolve, reject) => {
-        api.getUserInfo().then(res => {
-          if (res.code === 200) {
-            commit('SET_NAME', res.data.name)
-            commit('SET_AVATAR', res.data.avatar)
-            commit('SET_ROLES', res.data.role)
-          }
-          resolve(res)
-        }).catch(error => {
-          reject(error)
-        })
+        api
+          .getUserInfo()
+          .then(res => {
+            if (res.code === 200) {
+              commit('SET_NAME', res.data.name)
+              commit('SET_AVATAR', res.data.avatar)
+              commit('SET_ROLES', res.data.role)
+            }
+            resolve(res)
+          })
+          .catch(error => {
+            reject(error)
+          })
       })
     },
     //

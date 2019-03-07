@@ -1,8 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
-import {
-  Message
-} from 'element-ui'
+import { Message } from 'element-ui'
 
 // 创建axios 实例
 const service = axios.create({

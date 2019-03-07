@@ -6,12 +6,12 @@
  */
 
 export default {
-  data() {
+  data () {
     return {
       tableHeight: '0'
     }
   },
-  mounted() {
+  mounted () {
     this.$nextTick(() => {
       this.windowResize()
     })
@@ -19,9 +19,11 @@ export default {
   },
   methods: {
     // 监听窗口变化
-    windowResize() {
+    windowResize () {
       let table = document.getElementById('el-table-height')
-      table && (this.tableHeight = window.innerHeight - table.getBoundingClientRect().top - 40)
+      table &&
+        (this.tableHeight =
+          window.innerHeight - table.getBoundingClientRect().top - 40)
     }
   }
 }

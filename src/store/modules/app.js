@@ -12,7 +12,9 @@ const app = {
         state.requestLoading = 0
         return
       }
-      state.requestLoading = status ? ++state.requestLoading : --state.requestLoading
+      state.requestLoading = status
+        ? ++state.requestLoading
+        : --state.requestLoading
     },
     SET_SIZE: (state, size) => {
       state.size = size
@@ -23,7 +25,7 @@ const app = {
     SetLoading ({ commit }, status) {
       commit('SET_LOADING', status)
     },
-    setSize({ commit }, size) {
+    setSize ({ commit }, size) {
       commit('SET_SIZE', size)
     }
   }

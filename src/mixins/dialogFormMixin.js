@@ -1,7 +1,7 @@
 export default {
   methods: {
     // 触发关闭时
-    handleClose() {
+    handleClose () {
       this.$confirm('确认关闭？')
         .then(_ => {
           this.closeDialog()
@@ -9,17 +9,17 @@ export default {
         .catch(_ => {})
     },
     // 关闭dialog
-    closeDialog() {
+    closeDialog () {
       this.$emit('update:dialogVisible', false)
       this.resetForm()
     },
     // 重置表单
-    resetForm(formName = 'form') {
+    resetForm (formName = 'form') {
       this.$refs[formName].resetFields()
     },
     // 提交表单
-    submitForm(formName = 'form') {
-      this.$refs[formName].validate((valid) => {
+    submitForm (formName = 'form') {
+      this.$refs[formName].validate(valid => {
         if (valid) {
           this.submit()
         } else {

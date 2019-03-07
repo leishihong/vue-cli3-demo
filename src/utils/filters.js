@@ -1,9 +1,7 @@
 /**
  * 全局过滤器
  */
-import {
-  parseTime
-} from '@/utils'
+import { parseTime } from '@/utils'
 
 const filters = {
   // 时间戳转换为 yyyy-MM-dd mm:hh:ss

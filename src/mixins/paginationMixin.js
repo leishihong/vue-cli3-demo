@@ -1,5 +1,5 @@
 export default {
-  data() {
+  data () {
     return {
       pageParams: {
         page: 1,
@@ -9,17 +9,17 @@ export default {
       pageSizes: [10, 20, 30, 40, 50]
     }
   },
-  created() {
+  created () {
     this.copyPageParams = Object.assign({}, this.pageParams)
   },
   methods: {
-    handleSizeChange() {
+    handleSizeChange () {
       this.search(false)
     },
-    handleCurrentChange() {
+    handleCurrentChange () {
       this.search(false)
     },
-    resetPageParams() {
+    resetPageParams () {
       this.pageParams = Object.assign({}, this.copyPageParams)
     }
   }
