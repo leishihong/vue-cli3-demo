@@ -10,9 +10,10 @@ import Cookies from 'js-cookie'
 import '@/styles/index.scss'
 import '@/icons'
 
+import Util from './utils'
 import common from '@/utils/common' // 全局方法
 import filters from '@/utils/filters' // 全局过滤器
-import Util from './utils'
+import apis from './api/index'
 import '@/utils/permission'
 
 Vue.use(ElementUI, {
@@ -23,7 +24,10 @@ Vue.use(ElementUI, {
 for (let key in filters) {
   Vue.filter(key, filters[key])
 }
-
+/**
+ * api请求挂载vue实例
+ */
+Vue.prototype.$apis = apis
 /**
  * 工具类对象没有选择使用混入，直接注入原型
  */

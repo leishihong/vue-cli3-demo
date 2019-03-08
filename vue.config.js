@@ -70,7 +70,6 @@ module.exports = {
         args[0]['process.env'].MODE = `"${mode}"`
         args[0]['process.env'].BASE_API = '"http://pro-api.eloco.cn"'
       }
-      console.log(args)
       return args
     })
     // 压缩图片
