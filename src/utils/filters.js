@@ -1,12 +1,12 @@
 /**
  * 全局过滤器
  */
-import { parseTime } from '@/utils'
+import Util from './index.js'
 
 const filters = {
   // 时间戳转换为 yyyy-MM-dd mm:hh:ss
   DateTime: function (time) {
-    return parseTime(time)
+    return Util.parseTime(time)
   },
   // 状态
   styleStatus: function (status) {

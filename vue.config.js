@@ -1,5 +1,6 @@
 const path = require('path')
-const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const CompressionWebpackPlugin = require('compression-webpack-plugin') // 通过CompressionWebpackPlugin插件build提供压缩
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin') // 修改uglifyOptions去除console来减少文件大小
 
 function resolve (dir) {
   return path.join(__dirname, './', dir)
@@ -54,11 +55,33 @@ module.exports = {
     config.plugin('define').tap(args => {
       const argv = process.argv
       const mode = argv[argv.indexOf('--project-mode') + 1]
-      args[0]['process.env'].MODE = `"${mode}"`
-      args[0]['process.env'].BASE_API = '"http://editor-api.eloco.cn"'
+      if (mode === 'dev') {
+        args[0]['process.env'].MODE = `"${mode}"`
+        args[0]['process.env'].BASE_API = '"http://deve.cn"'
+      } else if (mode === 'test') {
+        args[0]['process.env'].MODE = `"${mode}"`
+        args[0]['process.env'].BASE_API = '"http://test-api.eloco.cn"'
+        console.log(args, args[0]['process.env'].MODE)
+      } else if (mode === 'pre') {
+        args[0]['process.env'].MODE = `"${mode}"`
+        args[0]['process.env'].BASE_API = '"http://pre-api.eloco.cn"'
+        console.log(args, args[0]['process.env'].MODE)
+      } else if (mode == 'pro') {
+        args[0]['process.env'].MODE = `"${mode}"`
+        args[0]['process.env'].BASE_API = '"http://pro-api.eloco.cn"'
+      }
+      console.log(args)
       return args
     })
-
+    // 压缩图片
+    // config.module
+    //   .rule('images')
+    //   .use('image-webpack-loader')
+    //   .loader('image-webpack-loader')
+    //   .options({
+    //     bypassOnDebug: true
+    //   })
+    //   .end()
     /**
      * 添加CDN参数到htmlWebpackPlugin配置中， 详见public/index.html 修改
      */
@@ -90,19 +113,6 @@ module.exports = {
     config.module.rule('images').test(/\.(png|jpe?g|gif|svg)(\?.*)?$/)
   },
 
-  // open: true,
-  // hot: true,
-  // https: true,
-  proxy: {
-    '/proxy': {
-      target: 'http://47.94.138.75',
-      changeOrigin: true,
-      pathRewrite: {
-        '^/proxy': ''
-      }
-    }
-  },
-
   // 修改webpack config, 使其不打包externals下的资源
   configureWebpack: config => {
     const myConfig = {}
@@ -122,16 +132,44 @@ module.exports = {
             minRatio: 0.8
           })
         )
+      // 修改uglifyOptions去除console来减少文件大小
+      // myConfig.plugins.push(
+      //   new UglifyJsPlugin({
+      //     uglifyOptions: {
+      //       compress: {
+      //         warnings: false,
+      //         drop_debugger: true,
+      //         drop_console: true
+      //       }
+      //     },
+      //     sourceMap: false,
+      //     parallel: true
+      //   })
+      // )
     }
     if (process.env.NODE_ENV === 'development') {
       /**
        * 关闭host check，方便使用ngrok之类的内网转发工具
        */
       myConfig.devServer = {
-        disableHostCheck: true
+        disableHostCheck: true,
+        port: '8090',
+        // https: true,
+        // open: true,
+        // 设置代理
+        proxy: {
+          '/proxy': {
+            target: 'http://47.94.138.75',
+            ws: true, // 是否启用websockets
+            changOrigin: true, // 开启代理：在本地会创建一个虚拟服务端，然后发送请求的数据，并同时接收请求的数据，这样服务端和服务端进行数据的交互就不会有跨域问题
+            pathRewrite: {
+              '^/proxy': ''
+            }
+          }
+        }
       }
     }
-    open: true
+
     //   hot: true
     //   // https: true,
     //   // proxy: {

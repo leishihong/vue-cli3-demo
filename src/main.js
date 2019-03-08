@@ -12,6 +12,7 @@ import '@/icons'
 
 import common from '@/utils/common' // 全局方法
 import filters from '@/utils/filters' // 全局过滤器
+import Util from './utils'
 import '@/utils/permission'
 
 Vue.use(ElementUI, {
@@ -23,6 +24,11 @@ for (let key in filters) {
   Vue.filter(key, filters[key])
 }
 
+/**
+ * 工具类对象没有选择使用混入，直接注入原型
+ */
+Vue.prototype.$util = Util
+
 Vue.use(common)
 
 Vue.config.productionTip = false
@@ -30,5 +36,33 @@ Vue.config.productionTip = false
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  beforeCreate () {
+    const ieVersion = this.$util.getIeVersion()
+    // get skeleton dom
+    const skeleton = document.querySelector('.skeleton')
+    // app加载完成之后隐藏或者删除dom
+    skeleton.style.opacity = '0'
+    let flag = true
+    if (ieVersion !== 0 && ieVersion <= 9) {
+      console.log('this is IE9')
+      setTimeout(() => {
+        document.body.removeChild(skeleton)
+      }, 0)
+    } else {
+      this.$util.addEvent(skeleton, 'transitionend', e => {
+        if (e.target === skeleton && flag) {
+          flag = false
+          skeleton.style.displpay = 'none'
+          setTimeout(() => {
+            document.body.removeChild(skeleton)
+          }, 0)
+        }
+      })
+    }
+    // 定时任务 确保删除
+    setTimeout(() => {
+      if (skeleton) document.body.removeChild(skeleton)
+    }, 200)
+  }
 }).$mount('#app')
